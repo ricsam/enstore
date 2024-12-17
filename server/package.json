@@ -1,0 +1,31 @@
+{
+  "name": "@enstore/server",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsc && node dist/index.js",
+    "build": "tsc"
+  },
+  "bin": {
+    "enstore-server": "src/cli.ts"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "fs-extra": "^11.1.1",
+    "commander": "^12.1.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/supertest": "^6.0.2",
+    "@types/express": "^4.17.17",
+    "@types/bun": "^1.1.14",
+    "@types/multer": "^1.4.7",
+    "typescript": "^5.7.2",
+    "memfs": "^4.15.0",
+    "supertest": "^7.0.0",
+    "@types/bcrypt": "^5.0.2"
+  }
+}
