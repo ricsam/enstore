@@ -1,8 +1,6 @@
-// EnstorePromiseFs.ts
-import { BaseFs, EnstoreFsConfig } from "./BaseFs";
-import fs from "fs";
-import path from "path";
 import axios from "axios";
+import path from "path";
+import { BaseFs, EnstoreFsConfig } from "./BaseFs";
 
 export interface ReadFileOptions {
   encoding?: BufferEncoding;
