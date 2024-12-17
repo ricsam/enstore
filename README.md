@@ -131,7 +131,3 @@ docker run -d \
 
 EnStore is licensed under the **MIT License**.  
 See [LICENSE](./LICENSE) for more details.
-
----
-
-**EnStore** – A flexible, **file-based** platform for streaming, storing, and managing files with role-based access and a Node.js–style developer experience. Enjoy building with **EnStore**!
