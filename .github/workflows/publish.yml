@@ -1,0 +1,83 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun test
+      - run: bun build.ts
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun test
+      - run: bun build.ts
+      - run: |
+          echo '@ricsam:registry=https://registry.npmjs.org' >> .npmrc
+          echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> .npmrc
+          echo '//registry.npmjs.org/:always-auth=true' >> .npmrc
+      - name: changeset publish
+        run: npx changeset publish --access=public --registry=https://registry.npmjs.org/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  docker_images:
+    # depending on default permission settings for your org (contents being read-only or read-write for workloads), you will have to add permissions
+    # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
+    permissions:
+      contents: write
+      packages: write
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: enstore-server meta
+        id: serverMeta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/ricsam/enstore-server
+          tags: |
+            type=sha
+            type=raw,alpha
+      - name: Build and push enstore-server
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.serverMeta.outputs.tags }}
+          labels: ${{ steps.serverMeta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          target: release
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+

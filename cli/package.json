@@ -1,14 +1,26 @@
 {
   "name": "@enstore/cli",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "scripts": {
-    "dev": "tsc && node dist/index.js",
-    "build": "tsc"
+  "version": "0.0.1",
+  "description": "Command-line interface for Enstore file storage system",
+  "main": "src/index.ts",
+  "author": "Ricsam <oss@ricsam.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricsam/enstore.git",
+    "directory": "cli"
   },
+  "keywords": [
+    "cli",
+    "storage",
+    "file-system",
+    "secure"
+  ],
+  "scripts": {},
   "dependencies": {
     "axios": "^1.5.0",
     "form-data": "^4.0.0",
+    "@enstore/fs": "workspace:*",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
@@ -17,6 +29,7 @@
     "@types/form-data": "^2.5.2",
     "@types/prompts": "^2.4.9",
     "typescript": "^5.7.2",
-    "@enstore/fs": "workspace:*"
+    "@swc/cli": "^0.5.2",
+    "@swc/core": "^1.10.1"
   }
 }

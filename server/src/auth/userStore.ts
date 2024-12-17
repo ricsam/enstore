@@ -15,9 +15,16 @@ const userFileSchema = z.object({
 });
 
 // Types derived from Zod
-export type RolePermissions = z.infer<typeof rolePermissionsSchema>;
-export type UserRecord = z.infer<typeof userRecordSchema>;
-export type UserFile = z.infer<typeof userFileSchema>;
+export type RolePermissions = Record<string, string[]>;
+export type UserRecord = {
+  username: string;
+  hashedPassword: string;
+  role: string;
+};
+export type UserFile = {
+  users: UserRecord[];
+  roles: RolePermissions;
+};
 
 export class UserStore {
   private userFilePath: string;

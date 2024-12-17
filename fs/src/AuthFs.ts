@@ -80,7 +80,7 @@ export class AuthFs {
     }
   }
 
-  public getCredentialsFilePath() {
+  public getCredentialsFilePath(): string {
     const overridePath = this.credentialsFilePath;
     if (overridePath && overridePath.trim() !== "") {
       return path.resolve(overridePath);

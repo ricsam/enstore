@@ -10,7 +10,11 @@ declare global {
 }
 
 export function authMiddleware(authService: AuthService) {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void | Response> => {
     // For simplicity, assume Basic Auth: "Authorization: Basic <base64(username:password)>"
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Basic ")) {
@@ -37,7 +41,7 @@ export function authorizePermission(
   authService: AuthService,
   permission: string,
 ) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction): void | Response => {
     if (!req.user) {
       return res.status(401).json({ error: "Unauthorized" });
     }

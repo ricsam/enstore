@@ -5,7 +5,7 @@ docker image build --tag local-enstore --target release .
 
 ### Debug image
 ```bash
-docker run --name local-enstore --rm -it -p 3000:3000 --entrypoint /bin/sh local-enstore
+docker run --name local-enstore --rm -it -p 3000:3000 --entrypoint /bin/bash local-enstore
 ```
 
 ### Run image

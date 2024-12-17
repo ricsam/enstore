@@ -1,3 +1,4 @@
+import { verify } from "./bcrypt";
 import { UserStore } from "./userStore";
 
 export class AuthService {
@@ -9,7 +10,7 @@ export class AuthService {
   ): Promise<boolean> {
     const user = this.userStore.getUser(username);
     if (!user) return false;
-    return await Bun.password.verify(password, user.hashedPassword, "bcrypt");
+    return await verify(password, user.hashedPassword);
   }
 
   public checkPermission(username: string, permission: string): boolean {

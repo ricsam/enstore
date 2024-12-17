@@ -2,8 +2,10 @@ import { Router, Request, Response } from "express";
 import { authorizePermission } from "../middleware/authMiddleware";
 import { UserStore } from "../auth/userStore";
 import { AuthService } from "../auth/auth";
+import bcrypt from "bcrypt";
+import { hash } from "../auth/bcrypt";
 
-export function userRoutes(authService: AuthService, userStore: UserStore) {
+export function userRoutes(authService: AuthService, userStore: UserStore): Router {
   const router = Router();
 
   // Add user (permission: manageUsers)
@@ -18,11 +20,7 @@ export function userRoutes(authService: AuthService, userStore: UserStore) {
           .json({ error: "Missing username, password, or role" });
       }
 
-      const saltRounds = 10;
-      const hashedPassword = await Bun.password.hash(password, {
-        algorithm: "bcrypt",
-        cost: saltRounds,
-      });
+      const hashedPassword = await hash(password);
 
       try {
         userStore.addUser({ username, hashedPassword, role });
@@ -44,11 +42,7 @@ export function userRoutes(authService: AuthService, userStore: UserStore) {
       try {
         const updatePayload: any = {};
         if (password) {
-          const saltRounds = 10;
-          updatePayload.hashedPassword = await Bun.password.hash(password, {
-            algorithm: "bcrypt",
-            cost: saltRounds,
-          });
+          updatePayload.hashedPassword = await hash(password);
         }
         if (role) {
           updatePayload.role = role;
