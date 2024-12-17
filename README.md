@@ -1,6 +1,6 @@
 # EnStore Project
 
-**EnStore** is a **file server** and **file management ecosystem** built in Node.js (and Bun), enabling file-based operations with **authentication**, **authorization**, **role-based access control**, and **streaming** capabilities. The project is divided into **multiple packages**, each focusing on a specific domain:
+**EnStore** is a **network file system**, **file server** and **file management ecosystem** built in Node.js (and Bun), enabling file-based operations with **authentication**, **authorization**, **role-based access control**, and **streaming** capabilities. The project is divided into **multiple packages**, each focusing on a specific domain:
 
 1. **`@enstore/server`**
 

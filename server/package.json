@@ -15,7 +15,8 @@
     "storage",
     "file-system",
     "secure",
-    "express"
+    "express",
+    "network-file-system"
   ],
   "scripts": {},
   "bin": {
