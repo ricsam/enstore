@@ -1,4 +1,4 @@
-import { AuthHandler, EnstoreFsConfig } from "./AuthHandler";
+import { AuthHandler, EnstoreCredentials } from "./AuthHandler";
 import axios from "axios";
 import { PassThrough, Writable } from "stream";
 import path from "path";
@@ -11,11 +11,17 @@ export interface CreateWriteStreamOptions {
   mode?: number;
 }
 
+export interface EnstoreFsOptions extends EnstoreCredentials {
+  pathPrefix?: string;
+}
+
 export class EnstoreFs extends AuthHandler {
   public static promises: EnstorePromiseFs;
+  public pathPrefix?: string;
 
-  constructor(config: EnstoreFsConfig) {
+  constructor(config: EnstoreCredentials & { pathPrefix?: string }) {
     super(config);
+    this.pathPrefix = config.pathPrefix;
     // Also attach a static instance of EnstorePromiseFs
     if (!EnstoreFs.promises) {
       // Create a new instance with the same config for convenience
@@ -31,8 +37,12 @@ export class EnstoreFs extends AuthHandler {
    * PassThrough, it's sent chunk-by-chunk to the server.
    */
   public createWriteStream(remotePath: string): Writable {
-    const parentDir = path.dirname(remotePath);
+    let parentDir = path.dirname(remotePath);
     const fileName = path.basename(remotePath);
+
+    if (this.pathPrefix) {
+      parentDir = path.join(this.pathPrefix, parentDir);
+    }
 
     // We create a PassThrough, which we'll pipe to the multipart form
     const passThrough = new PassThrough();

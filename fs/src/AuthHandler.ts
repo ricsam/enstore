@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 
-export interface EnstoreFsConfig {
+export interface EnstoreCredentials {
   endpoint?: string;
   username?: string;
   password?: string;
@@ -21,7 +21,7 @@ export class AuthHandler {
   public password: string;
   private credentialsFilePath?: string;
 
-  constructor(config: EnstoreFsConfig) {
+  constructor(config: EnstoreCredentials) {
     // 1) Use provided config
     let { endpoint, username, password, credentialsFilePath } = config;
 

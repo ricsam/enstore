@@ -1,6 +1,6 @@
 import axios from "axios";
 import path from "path";
-import { AuthHandler, EnstoreFsConfig } from "./AuthHandler";
+import { AuthHandler, EnstoreCredentials } from "./AuthHandler";
 
 export interface ReadFileOptions {
   encoding?: BufferEncoding;
@@ -14,7 +14,7 @@ export interface WriteFileOptions {
 }
 
 export class EnstorePromiseFs extends AuthHandler {
-  constructor(config: EnstoreFsConfig) {
+  constructor(config: EnstoreCredentials) {
     super(config);
   }
 
