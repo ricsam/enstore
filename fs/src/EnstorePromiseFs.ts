@@ -1,6 +1,6 @@
 import axios from "axios";
 import path from "path";
-import { BaseFs, EnstoreFsConfig } from "./BaseFs";
+import { AuthHandler, EnstoreFsConfig } from "./AuthHandler";
 
 export interface ReadFileOptions {
   encoding?: BufferEncoding;
@@ -13,7 +13,7 @@ export interface WriteFileOptions {
   flag?: string;
 }
 
-export class EnstorePromiseFs extends BaseFs {
+export class EnstorePromiseFs extends AuthHandler {
   constructor(config: EnstoreFsConfig) {
     super(config);
   }
@@ -23,10 +23,9 @@ export class EnstorePromiseFs extends BaseFs {
    * Node.js signature: fs.promises.readFile(path[, options])
    */
   public async readFile(
-    filePath: string,
+    remotePath: string,
     options?: ReadFileOptions | BufferEncoding,
   ): Promise<string | Buffer> {
-    const remotePath = this.resolveRemotePath(filePath);
     // If the user passed a single encoding string, treat it as { encoding: string }
     let encoding: BufferEncoding | null = null;
     if (typeof options === "string") {
@@ -58,11 +57,10 @@ export class EnstorePromiseFs extends BaseFs {
    * Node.js signature: fs.promises.writeFile(file, data[, options])
    */
   public async writeFile(
-    filePath: string,
+    remotePath: string,
     data: Buffer | string,
     options?: WriteFileOptions | BufferEncoding,
   ): Promise<void> {
-    const remotePath = this.resolveRemotePath(filePath);
     let encoding: BufferEncoding | null = null;
     if (typeof options === "string") {
       encoding = options;
@@ -82,8 +80,8 @@ export class EnstorePromiseFs extends BaseFs {
     // The EnStore server expects a multipart form-data with file content
     const FormData = (await import("form-data")).default;
     const form = new FormData();
-    // We'll pass the final filename as whatever filePath's basename is
-    const fileName = path.basename(filePath);
+    // We'll pass the final filename as whatever remotePath's basename is
+    const fileName = path.basename(remotePath);
     form.append("file", bufferData, { filename: fileName });
 
     // remoteDir is the parent path (leading directories)

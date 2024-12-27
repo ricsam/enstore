@@ -1,5 +1,11 @@
 # @enstore/fs
 
+## 0.0.4
+
+### Patch Changes
+
+- Typecheck and remove the rootDirectory option
+
 ## 0.0.3
 
 ### Patch Changes

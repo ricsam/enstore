@@ -1,6 +1,6 @@
 {
   "name": "@enstore/server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Server component for Enstore file storage system",
   "main": "src/index.ts",
   "author": "Ricsam <oss@ricsam.dev>",
@@ -18,7 +18,9 @@
     "express",
     "network-file-system"
   ],
-  "scripts": {},
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "bin": {
     "enstore-server": "src/cli.ts"
   },
@@ -33,7 +35,7 @@
   },
   "devDependencies": {
     "@types/supertest": "6.0.2",
-    "@types/express": "5.0.0",
+    "@types/express": "^4",
     "@types/bun": "1.1.14",
     "@types/multer": "1.4.12",
     "typescript": "5.7.2",

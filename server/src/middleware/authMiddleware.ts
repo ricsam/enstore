@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { AuthService } from "../auth/auth";
 
 declare global {
@@ -9,16 +9,17 @@ declare global {
   }
 }
 
-export function authMiddleware(authService: AuthService) {
+export function authMiddleware(authService: AuthService): RequestHandler {
   return async (
     req: Request,
     res: Response,
     next: NextFunction,
-  ): Promise<void | Response> => {
+  ): Promise<void> => {
     // For simplicity, assume Basic Auth: "Authorization: Basic <base64(username:password)>"
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Basic ")) {
-      return res.status(401).json({ error: "Unauthorized" });
+      res.status(401).json({ error: "Unauthorized" });
+      return;
     }
 
     const base64Credentials = authHeader.slice("Basic ".length).trim();
@@ -29,7 +30,8 @@ export function authMiddleware(authService: AuthService) {
 
     const verified = await authService.verifyCredentials(username, password);
     if (!verified) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
     }
 
     req.user = username;
@@ -41,13 +43,15 @@ export function authorizePermission(
   authService: AuthService,
   permission: string,
 ) {
-  return (req: Request, res: Response, next: NextFunction): void | Response => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     if (!req.user) {
-      return res.status(401).json({ error: "Unauthorized" });
+      res.status(401).json({ error: "Unauthorized" });
+      return;
     }
     const hasPermission = authService.checkPermission(req.user, permission);
     if (!hasPermission) {
-      return res.status(403).json({ error: "Forbidden" });
+      res.status(403).json({ error: "Forbidden" });
+      return;
     }
     next();
   };

@@ -25,9 +25,9 @@ export function createEnStoreMiddleware(config: EnStoreConfig): Router {
 
   // Create an Express Router
   const router = express.Router();
-  router.use("/healthz", (req, res) =>
-    res.json({ status: "ok", encacheVersion: "1.0.0" }),
-  );
+  router.use("/healthz", (req, res) => {
+    res.json({ status: "ok", encacheVersion: "1.0.0" });
+  });
 
   router.use(bodyParser.json());
 

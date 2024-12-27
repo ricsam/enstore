@@ -1,4 +1,4 @@
-import { BaseFs, EnstoreFsConfig } from "./BaseFs";
+import { AuthHandler, EnstoreFsConfig } from "./AuthHandler";
 import axios from "axios";
 import { PassThrough, Writable } from "stream";
 import path from "path";
@@ -11,7 +11,7 @@ export interface CreateWriteStreamOptions {
   mode?: number;
 }
 
-export class EnstoreFs extends BaseFs {
+export class EnstoreFs extends AuthHandler {
   public static promises: EnstorePromiseFs;
 
   constructor(config: EnstoreFsConfig) {
@@ -30,8 +30,7 @@ export class EnstoreFs extends BaseFs {
    * Then we start an Axios POST request in parallel. As data is written to the
    * PassThrough, it's sent chunk-by-chunk to the server.
    */
-  public createWriteStream(filePath: string): Writable {
-    const remotePath = this.resolveRemotePath(filePath);
+  public createWriteStream(remotePath: string): Writable {
     const parentDir = path.dirname(remotePath);
     const fileName = path.basename(remotePath);
 

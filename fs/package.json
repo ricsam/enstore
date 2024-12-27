@@ -1,6 +1,6 @@
 {
   "name": "@enstore/fs",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "File system utilities for Enstore storage system",
   "main": "src/index.ts",
   "author": "Ricsam <oss@ricsam.dev>",
@@ -17,7 +17,7 @@
     "utilities"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "axios": "^1.7.9",

@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, RequestHandler } from "express";
 import { AuthService } from "../auth/auth";
 import { authorizePermission } from "../middleware/authMiddleware";
 import fs from "fs";
@@ -46,22 +46,25 @@ export function fileRoutes(
       try {
         const dirParam = req.query.dir as string;
         if (!dirParam) {
-          return res.status(400).json({ error: "Missing dir parameter" });
+          res.status(400).json({ error: "Missing dir parameter" });
+          return;
         }
 
         const targetDir = resolveSafePath(dirParam);
         // If this directory doesn't exist or is a file, handle errors
         if (!fs.existsSync(targetDir)) {
-          return res.status(404).json({ error: "Directory not found" });
+          res.status(404).json({ error: "Directory not found" });
+          return;
         }
         if (!fs.lstatSync(targetDir).isDirectory()) {
-          return res.status(400).json({ error: "Not a directory" });
+          res.status(400).json({ error: "Not a directory" });
+          return;
         }
 
         const files = fs.readdirSync(targetDir);
-        return res.json({ files });
+        res.json({ files });
       } catch (error) {
-        return res.status(500).json({ error: (error as Error).message });
+        res.status(500).json({ error: (error as Error).message });
       }
     },
   );
@@ -70,23 +73,24 @@ export function fileRoutes(
   router.get(
     "/readFile",
     authorizePermission(authService, "read"),
-    (req: Request, res: Response) => {
+    (req: Request, res: Response): void => {
       const relativePath = req.query.path as string;
       if (!relativePath) {
-        return res.status(400).json({ error: "Missing file path" });
+        res.status(400).json({ error: "Missing file path" });
+        return;
       }
 
       let filePath: string;
       try {
         filePath = resolveSafePath(relativePath);
       } catch (error) {
-        return res.status(403).json({ error: (error as Error).message });
+        res.status(403).json({ error: (error as Error).message });
+        return;
       }
 
       if (!fs.existsSync(filePath)) {
-        return res
-          .status(404)
-          .json({ error: `File not found: ${relativePath}` });
+        res.status(404).json({ error: `File not found: ${relativePath}` });
+        return;
       }
 
       // Stream the file content back to the client
@@ -105,9 +109,10 @@ export function fileRoutes(
     "/writeFile",
     authorizePermission(authService, "write"),
     upload.single("file"),
-    (req: Request, res: Response) => {
+    (req: Request, res: Response): void => {
       if (!req.file) {
-        return res.status(400).json({ error: "No file uploaded" });
+        res.status(400).json({ error: "No file uploaded" });
+        return;
       }
 
       // The user-provided 'path' is the directory portion where the file is to be placed.
@@ -120,7 +125,8 @@ export function fileRoutes(
         targetDir = resolveSafePath(requestedDir);
       } catch (error) {
         // If user tries to escape outside rootDir
-        return res.status(403).json({ error: (error as Error).message });
+        res.status(403).json({ error: (error as Error).message });
+        return;
       }
 
       // Ensure targetDir exists or create it

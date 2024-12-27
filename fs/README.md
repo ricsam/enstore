@@ -42,9 +42,7 @@ npm install @enstore/fs
 ```ts
 import { EnstoreFs } from '@enstore/fs';
 
-// Create an instance pointing "rootDirectory" to /var/logs (on your local system)
 const enFs = new EnstoreFs({
-  rootDirectory: '/var/logs',
   // credentials can come from environment or credentials file
 });
 

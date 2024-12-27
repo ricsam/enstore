@@ -1,4 +1,4 @@
-import { AuthFs, CredentialsFile } from "@enstore/fs";
+import { AuthHandler, CredentialsFile } from "@enstore/fs";
 import axios from "axios";
 import { Command } from "commander";
 import FormData from "form-data";
@@ -34,7 +34,7 @@ function resolveCredentials(): {
 } {
   const opts = program.opts();
   const credFilePath: string | undefined = opts.credentials;
-  const fs = new AuthFs({
+  const fs = new AuthHandler({
     credentialsFilePath: credFilePath,
   });
 
@@ -72,7 +72,7 @@ const loginCmd = new Command("login")
   )
   .action(async (endpoint: string, username: string) => {
     const opts = program.opts();
-    const credFilePath = new AuthFs({
+    const credFilePath = new AuthHandler({
       credentialsFilePath: opts.credentials,
     }).getCredentialsFilePath();
 

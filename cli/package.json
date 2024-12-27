@@ -1,6 +1,6 @@
 {
   "name": "@enstore/cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Command-line interface for Enstore file storage system",
   "main": "src/index.ts",
   "author": "Ricsam <oss@ricsam.dev>",
@@ -16,7 +16,9 @@
     "file-system",
     "secure"
   ],
-  "scripts": {},
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "axios": "^1.7.9",
     "form-data": "^4.0.1",
