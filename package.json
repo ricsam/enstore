@@ -6,6 +6,9 @@
   "keywords": ["storage", "file-system", "secure", "cli"],
   "author": "Ricsam <oss@ricsam.dev>",
   "license": "MIT",
+  "scripts": {
+    "docs": "typedoc --out docs --tsconfig tsconfig.json --name enstore --entryPoints fs/src/index.ts --entryPoints server/src/index.ts"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ricsam/enstore.git"
@@ -17,6 +20,7 @@
   ],
   "dependencies": {
     "prettier": "3.4.2",
-    "@changesets/cli": "^2.27.10"
+    "@changesets/cli": "^2.27.10",
+    "typedoc": "^0.27.6"
   }
 }
