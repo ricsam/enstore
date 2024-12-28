@@ -1,5 +1,5 @@
 import { verify } from "./bcrypt";
-import { UserStore } from "./userStore";
+import { UserStore } from "./user-store";
 
 export class AuthService {
   constructor(private userStore: UserStore) {}

@@ -1,6 +1,6 @@
 import axios from "axios";
 import path from "path";
-import { AuthHandler, EnstoreCredentials } from "./AuthHandler";
+import { AuthHandler, EnstoreCredentials } from "./auth-handler";
 
 export interface ReadFileOptions {
   encoding?: BufferEncoding;

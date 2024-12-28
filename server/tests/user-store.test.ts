@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test } from "bun:test";
 import fs from "fs";
 
 import path from "path";
-import { UserStore } from "../src/auth/userStore";
+import { UserStore } from "../src/auth/user-store";
 
 describe("UserStore tests", () => {
   const userFilePath = path.join(__dirname, "users.json");

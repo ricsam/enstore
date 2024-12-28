@@ -1,6 +1,6 @@
 import { Router, Request, Response, RequestHandler } from "express";
 import { AuthService } from "../auth/auth";
-import { authorizePermission } from "../middleware/authMiddleware";
+import { authorizePermission } from "../middleware/auth-middleware";
 import fs from "fs";
 import path from "path";
 import multer from "multer";

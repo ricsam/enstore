@@ -5,9 +5,9 @@ import request from "supertest";
 import bodyParser from "body-parser";
 
 import { AuthService } from "../src/auth/auth";
-import { UserStore } from "../src/auth/userStore";
-import { authMiddleware } from "../src/middleware/authMiddleware";
-import { fileRoutes } from "../src/routes/fileRoutes";
+import { UserStore } from "../src/auth/user-store";
+import { authMiddleware } from "../src/middleware/auth-middleware";
+import { fileRoutes } from "../src/routes/file-routes";
 import fs from "fs";
 
 describe("File Routes Tests", () => {

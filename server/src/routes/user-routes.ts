@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
-import { authorizePermission } from "../middleware/authMiddleware";
-import { UserStore } from "../auth/userStore";
+import { authorizePermission } from "../middleware/auth-middleware";
+import { UserStore } from "../auth/user-store";
 import { AuthService } from "../auth/auth";
 import bcrypt from "bcrypt";
 import { hash } from "../auth/bcrypt";

@@ -1,5 +1,5 @@
-export { AuthHandler } from "./AuthHandler";
-export type { CredentialsFile } from "./AuthHandler";
-export { EnstoreFs } from "./EnstoreFs";
-export type { EnstoreFsOptions } from "./EnstoreFs";
-export { EnstorePromiseFs } from "./EnstorePromiseFs";
+export { AuthHandler } from "./auth-handler";
+export type { CredentialsFile } from "./auth-handler";
+export { EnstoreFs } from "./enstore-fs";
+export type { EnstoreFsOptions } from "./enstore-fs";
+export { EnstorePromiseFs } from "./enstore-promise-fs";

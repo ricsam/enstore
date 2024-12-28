@@ -28,15 +28,15 @@ You can embed EnStore’s routes in your own Express app by using the middleware
 
 ```ts
 import express from 'express';
-import { createEnStoreMiddleware, EnStoreConfig } from '@enstore/server';
+import { createEnstoreMiddleware, EnstoreServerConfig } from '@enstore/server';
 
 const app = express();
-const config: EnStoreConfig = {
+const config: EnstoreServerConfig = {
   uploadsDirectory: './uploads',
   userFilePath: './users.json',
 };
 
-app.use('/enstore', createEnStoreMiddleware(config));
+app.use('/enstore', createEnstoreMiddleware(config));
 
 app.listen(3000, () => {
   console.log(`Server running on port 3000`);

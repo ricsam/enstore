@@ -1,5 +1,11 @@
 # @enstore/server
 
+## 0.0.3
+
+### Patch Changes
+
+- add createReadStream
+
 ## 0.0.2
 
 ### Patch Changes

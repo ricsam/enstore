@@ -2,17 +2,17 @@ import bodyParser from "body-parser";
 import express, { Router } from "express";
 import fs from "fs";
 import { AuthService } from "./auth/auth";
-import { UserStore } from "./auth/userStore";
-import { authMiddleware } from "./middleware/authMiddleware";
-import { fileRoutes } from "./routes/fileRoutes";
-import { userRoutes } from "./routes/userRoutes";
+import { UserStore } from "./auth/user-store";
+import { authMiddleware } from "./middleware/auth-middleware";
+import { fileRoutes } from "./routes/file-routes";
+import { userRoutes } from "./routes/user-routes";
 
-export interface EnStoreConfig {
+export interface EnstoreServerConfig {
   uploadsDirectory: string;
   userFilePath: string;
 }
 
-export function createEnStoreMiddleware(config: EnStoreConfig): Router {
+export function createEnstoreMiddleware(config: EnstoreServerConfig): Router {
   const { uploadsDirectory, userFilePath } = config;
 
   // Prepare directories

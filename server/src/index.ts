@@ -1,2 +1,2 @@
-export { createEnStoreMiddleware } from "./enstoreMiddleware";
-export type { EnStoreConfig } from "./enstoreMiddleware";
+export { createEnstoreMiddleware } from "./enstore-middleware";
+export type { EnstoreServerConfig } from "./enstore-middleware";

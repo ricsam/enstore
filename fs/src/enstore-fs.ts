@@ -1,9 +1,9 @@
-import { AuthHandler, EnstoreCredentials } from "./AuthHandler";
+import { AuthHandler, EnstoreCredentials } from "./auth-handler";
 import axios from "axios";
-import { PassThrough, Writable } from "stream";
+import { PassThrough, Readable, Writable } from "stream";
 import path from "path";
 import FormData from "form-data";
-import { EnstorePromiseFs } from "./EnstorePromiseFs";
+import { EnstorePromiseFs } from "./enstore-promise-fs";
 
 export interface CreateWriteStreamOptions {
   encoding?: BufferEncoding;
@@ -19,7 +19,7 @@ export class EnstoreFs extends AuthHandler {
   public static promises: EnstorePromiseFs;
   public pathPrefix?: string;
 
-  constructor(config: EnstoreCredentials & { pathPrefix?: string }) {
+  constructor(config: EnstoreFsOptions) {
     super(config);
     this.pathPrefix = config.pathPrefix;
     // Also attach a static instance of EnstorePromiseFs
@@ -29,13 +29,6 @@ export class EnstoreFs extends AuthHandler {
     }
   }
 
-  /**
-   * createWriteStream(path, [options]) => Writable
-   *
-   * A truly streaming approach: we create a PassThrough that we append to a FormData.
-   * Then we start an Axios POST request in parallel. As data is written to the
-   * PassThrough, it's sent chunk-by-chunk to the server.
-   */
   public createWriteStream(remotePath: string): Writable {
     let parentDir = path.dirname(remotePath);
     const fileName = path.basename(remotePath);
@@ -70,6 +63,36 @@ export class EnstoreFs extends AuthHandler {
 
     // Return the PassThrough as a writable stream to the caller.
     // As the caller writes data to this stream, it flows to the server chunk-by-chunk.
+    return passThrough;
+  }
+
+  public createReadStream(remotePath: string): Readable {
+    let dir = remotePath;
+
+    if (this.pathPrefix) {
+      dir = path.join(this.pathPrefix, dir);
+    }
+
+    // We create a PassThrough, which we'll pipe to the multipart form
+    const passThrough = new PassThrough();
+
+    // Construct the final URL
+    const url = `${this.endpoint}/files/readFile`;
+
+    // Start the Axios POST request immediately
+    const requestPromise = axios
+      .get(url, {
+        auth: { username: this.username, password: this.password },
+        params: { path: dir },
+        responseType: "stream",
+      })
+      .then((response) => {
+        response.data.pipe(passThrough);
+      })
+      .catch((err) => {
+        passThrough.emit("error", err);
+      });
+
     return passThrough;
   }
 }

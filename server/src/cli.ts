@@ -4,9 +4,9 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import express from "express";
-import { createEnStoreMiddleware, EnStoreConfig } from "./enstoreMiddleware";
+import { createEnstoreMiddleware, EnstoreServerConfig } from "./enstore-middleware";
 
-import { UserStore } from "./auth/userStore";
+import { UserStore } from "./auth/user-store";
 import bcrypt from "bcrypt";
 import prompts from "prompts";
 
@@ -44,7 +44,7 @@ const startCmd = new Command("start")
       userFilePath = path.join(defaultDir, "users.json");
     }
 
-    const config: EnStoreConfig = {
+    const config: EnstoreServerConfig = {
       uploadsDirectory,
       userFilePath,
     };
@@ -55,7 +55,7 @@ const startCmd = new Command("start")
 
     // Initialize Express server
     const app = express();
-    app.use("/", createEnStoreMiddleware(config));
+    app.use("/", createEnstoreMiddleware(config));
 
     const server = app.listen(port, () => {
       console.log(`EnStore server running on port ${port}`);
