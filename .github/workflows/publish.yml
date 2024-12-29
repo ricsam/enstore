@@ -68,7 +68,8 @@ jobs:
           images: |
             ghcr.io/ricsam/enstore-server
           tags: |
-            type=ref,event=branch
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
       - name: Build and push enstore-server
         uses: docker/build-push-action@v4
         with:
