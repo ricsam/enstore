@@ -13,5 +13,5 @@ if [[ -n "$ADMIN_USERNAME" && -n "$ADMIN_PASSWORD" ]]; then
   echo "$ADMIN_PASSWORD" | enstore-server user add "$ADMIN_USERNAME" admin --users /app/users.json || true
 fi
 
-echo "Starting EnStore server..."
+echo "Starting Enstore server..."
 exec enstore-server start -p "$PORT" -d /app/uploads --users /app/users.json

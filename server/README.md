@@ -24,7 +24,7 @@ Once installed globally, you have the `enstore-server` command available.
 
 ### 1. **Run as Express Middleware**
 
-You can embed EnStore’s routes in your own Express app by using the middleware factory:
+You can embed Enstore’s routes in your own Express app by using the middleware factory:
 
 ```ts
 import express from 'express';
@@ -60,7 +60,7 @@ enstore-server start --port 8080 --users ./users.json --uploads-dir ./uploads
 - `--users <path>`: Path to `users.json` (defaults to `~/.enstore/users.json` if not specified).
 - `-d, --uploads-dir <path>`: Directory for uploaded files (defaults to `./uploads`).
 
-If you omit flags, EnStore uses sensible defaults (port 3000, `~/.enstore/users.json`, `./uploads` folder).
+If you omit flags, Enstore uses sensible defaults (port 3000, `~/.enstore/users.json`, `./uploads` folder).
 
 **Example**:
 ```bash
@@ -88,7 +88,7 @@ docker run -d \
   start --port 3000 --users /app/users.json --uploads-dir /app/uploads
 ```
 
-This starts EnStore inside a container listening on port 3000 (mapped to 8080 on the host).
+This starts Enstore inside a container listening on port 3000 (mapped to 8080 on the host).
 
 ---
 
@@ -136,7 +136,7 @@ enstore-server user delete-role editor --users ./users.json
 
 ## How User Management Works
 
-EnStore stores users and roles in **`users.json`**. The file structure is:
+Enstore stores users and roles in **`users.json`**. The file structure is:
 
 ```json
 {
@@ -176,7 +176,7 @@ EnStore stores users and roles in **`users.json`**. The file structure is:
 ---
 
 **That’s it!** Now you can:
-- Embed EnStore’s routes in your **own Express app**.
+- Embed Enstore’s routes in your **own Express app**.
 - Run the **CLI** (`enstore-server start`) to launch a standalone server.
 - Manage users locally with `enstore-server user ...`.
 - Or **pull** the Docker image `ghcr.io/ricsam/enstore-server:latest` and run it in a container.

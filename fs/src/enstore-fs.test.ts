@@ -69,7 +69,7 @@ describe("EnstoreFs", () => {
   it("should write a file using createWriteStream and confirm on server", async () => {
     // 2) Write data
     const ws = enFs.createWriteStream("/myTest.txt");
-    ws.write("Hello, EnStore!\n");
+    ws.write("Hello, Enstore!\n");
     ws.end();
 
     // Wait a bit for the upload to finalize
@@ -77,7 +77,7 @@ describe("EnstoreFs", () => {
 
     const filePath = path.join("/uploads/somePrefix", "myTest.txt");
     const content = fs.readFileSync(filePath, "utf-8");
-    expect(content).toContain("Hello, EnStore!");
+    expect(content).toContain("Hello, Enstore!");
   });
 
   it("should read a file using createReadStream", async () => {

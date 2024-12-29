@@ -1,5 +1,11 @@
 # @enstore/fs
 
+## 0.0.7
+
+### Patch Changes
+
+- Update readmes and change any EnStore spellings to Enstore
+
 ## 0.0.6
 
 ### Patch Changes

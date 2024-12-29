@@ -14,7 +14,7 @@ export interface WriteFileOptions {
 }
 
 export class EnstorePromiseFs extends AuthHandler {
-  constructor(config: EnstoreCredentials) {
+  constructor(config?: EnstoreCredentials) {
     super(config);
   }
 
@@ -34,7 +34,7 @@ export class EnstorePromiseFs extends AuthHandler {
       encoding = options.encoding;
     }
 
-    // -- Perform the actual HTTP GET to your EnStore server endpoint
+    // -- Perform the actual HTTP GET to your Enstore server endpoint
     // e.g. GET /files/readFile?path=<remotePath>
     try {
       const resp = await axios.get(`${this.endpoint}/files/readFile`, {
@@ -77,7 +77,7 @@ export class EnstorePromiseFs extends AuthHandler {
     }
 
     // POST /files/writeFile?path=<remoteDir>
-    // The EnStore server expects a multipart form-data with file content
+    // The Enstore server expects a multipart form-data with file content
     const FormData = (await import("form-data")).default;
     const form = new FormData();
     // We'll pass the final filename as whatever remotePath's basename is

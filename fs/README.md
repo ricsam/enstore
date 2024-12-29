@@ -1,11 +1,11 @@
 # @enstore/fs
 
-**`@enstore/fs`** is a Node.js–style file system interface that seamlessly **mounts** a remote [EnStore](https://github.com/ricsam/enstore) server as if it were a local filesystem. It provides APIs similar to **Node.js `fs`**—both **stream-based** (`createWriteStream`) and **promise-based** (`readFile`, `writeFile`).
+**`@enstore/fs`** is a Node.js–style file system interface that seamlessly **mounts** a remote [Enstore](https://github.com/ricsam/enstore) server as if it were a local filesystem. It provides APIs similar to **Node.js `fs`**—both **stream-based** (`createWriteStream`) and **promise-based** (`readFile`, `writeFile`).
 
 It introduces the following classes:
 
 1. **`EnstoreFs`**  
-   - Offers a **`createWriteStream`** method analogous to `fs.createWriteStream` in Node.js, allowing you to **stream** file uploads chunk-by-chunk to an EnStore server.
+   - Offers a **`createWriteStream`** method analogous to `fs.createWriteStream` in Node.js, allowing you to **stream** file uploads chunk-by-chunk to an Enstore server.
    - Exposes a **static** property **`EnstoreFs.promises`** pointing to an **`EnstorePromiseFs`** instance for promise-based operations.
 
 2. **`EnstorePromiseFs`**  
@@ -27,7 +27,7 @@ npm install @enstore/fs
 ## Usage Overview
 
 1. **Instantiate** an **`EnstoreFs`** or **`EnstorePromiseFs`** object with configuration for:
-   - **Root directory** (a local path you treat as `"/"` on the EnStore server)
+   - **Root directory** (a local path you treat as `"/"` on the Enstore server)
    - **Credentials** (endpoint, username, password) either directly, via environment variables, or via a credential file.
 
 2. **Use** the familiar `fs`-like methods:
@@ -60,7 +60,7 @@ writeStream.end(() => {
 });
 ```
 
-In this example, **local** file paths like `"/var/logs/nginx/access.log"` map to **remote** EnStore paths like `"/nginx/access.log"`.
+In this example, **local** file paths like `"/var/logs/nginx/access.log"` map to **remote** Enstore paths like `"/nginx/access.log"`.
 
 ---
 
@@ -74,17 +74,13 @@ interface EnstoreFsConfig {
   username?: string;
   password?: string;
   credentialsFilePath?: string;
-  rootDirectory: string; // required
 }
 ```
 
-1. **`rootDirectory`** (required)  
-   - A **local** path you consider as **root**. For instance, `"/var/logs"` in your code maps to `"/"` on the EnStore server.
-
-2. **Credentials** can be resolved in **three** steps:
-   1. **Constructor** config: if `endpoint`, `username`, `password` are explicitly provided, these take priority.
-   2. **Environment Variables**: `ENSTORE_ENDPOINT`, `ENSTORE_USERNAME`, `ENSTORE_PASSWORD`.
-   3. **Credentials File**: A JSON file (by default at `~/.enstore/credentials.json`) or a custom path specified by `credentialsFilePath`.
+**Credentials** can be resolved in **three** steps:
+  1. **Constructor** config: if `endpoint`, `username`, `password` are explicitly provided, these take priority.
+  2. **Environment Variables**: `ENSTORE_ENDPOINT`, `ENSTORE_USERNAME`, `ENSTORE_PASSWORD`.
+  3. **Credentials File**: A JSON file (by default at `~/.enstore/credentials.json`) or a custom path specified by `credentialsFilePath`.
 
 If any required credential (`endpoint`, `username`, `password`) remains missing after these steps, the constructor throws an error.
 
@@ -95,7 +91,7 @@ If any required credential (`endpoint`, `username`, `password`) remains missing 
 **`EnstoreFs`** extends `BaseFs` and provides:
 
 - **`createWriteStream(path, [options])`**  
-  Returns a **`Writable`** Node.js stream that uploads data to EnStore **in real time**. As you write chunks, they are streamed chunk-by-chunk to the remote server using multipart form-data.
+  Returns a **`Writable`** Node.js stream that uploads data to Enstore **in real time**. As you write chunks, they are streamed chunk-by-chunk to the remote server using multipart form-data.
 
 - **Static**: **`EnstoreFs.promises`** (instance of `EnstorePromiseFs`)  
   A convenient way to access promise-based methods without instantiating `EnstorePromiseFs` separately.
@@ -103,7 +99,7 @@ If any required credential (`endpoint`, `username`, `password`) remains missing 
 ### Streaming Example
 
 ```ts
-const enFs = new EnstoreFs({ rootDirectory: '/data/logs' });
+const enFs = new EnstoreFs();
 
 const writeStream = enFs.createWriteStream('/data/logs/giantFile.log');
 
@@ -120,7 +116,7 @@ writeStream.write('chunk 2...');
 writeStream.end();
 ```
 
-Your EnStore server (e.g. Express + Multer) can handle this multipart chunked upload. This approach is memory-efficient for large files.
+Your Enstore server (e.g. Express + Multer) can handle this multipart chunked upload. This approach is memory-efficient for large files.
 
 ---
 
@@ -140,20 +136,13 @@ Your EnStore server (e.g. Express + Multer) can handle this multipart chunked up
 import { EnstorePromiseFs } from '@enstore/fs';
 
 (async function main() {
-  const promiseFs = new EnstorePromiseFs({ rootDirectory: '/home/user/files' });
+  const promiseFs = new EnstorePromiseFs();
 
-  await promiseFs.writeFile('/home/user/files/note.txt', 'Hello from EnStore!', 'utf-8');
+  await promiseFs.writeFile('/home/user/files/note.txt', 'Hello from Enstore!', 'utf-8');
   const content = await promiseFs.readFile('/home/user/files/note.txt', 'utf-8');
   console.log(content);
 })();
 ```
-
----
-
-## Root Directory Mapping
-
-- If `rootDirectory = "/some/local/path"`, then passing `"/some/local/path/foo/bar.txt"` to `readFile` or `writeFile` automatically translates to `"/foo/bar.txt"` **on the remote server**.
-- If you pass a local path outside of `rootDirectory`, the library throws an error (e.g., `Path /home/outside is outside the rootDirectory /some/local/path`).
 
 ---
 
@@ -179,7 +168,6 @@ If you prefer a different path, specify **`credentialsFilePath`** in the constru
 
 ```ts
 new EnstoreFs({
-  rootDirectory: '/mnt', 
   credentialsFilePath: '/path/to/mycreds.json'
 });
 ```
@@ -198,7 +186,6 @@ new EnstoreFs({
    import { EnstoreFs } from '@enstore/fs';
 
    const enFs = new EnstoreFs({
-     rootDirectory: '/mnt/myfiles'
      // endpoint, username, password can come from ENV or credentialsFile
    });
 
@@ -219,11 +206,11 @@ new EnstoreFs({
 
 ## Limitations & Notes
 
-- **Chunked Streaming**: The `createWriteStream` method uses a **multipart** approach to chunk data. Ensure your EnStore server supports streaming multipart uploads (e.g. with Multer, Busboy, etc.).
+- **Chunked Streaming**: The `createWriteStream` method uses a **multipart** approach to chunk data. Ensure your Enstore server supports streaming multipart uploads (e.g. with Multer, Busboy, etc.).
 - **Root Directory**: Strictly enforces paths under the specified root. Trying to read/write outside will throw an error.
-- **File listing** / other `fs` methods (like `readdir`, `stat`) are **not** yet implemented. You can add them following a similar pattern (use `/files/ls` or `/files/stat` EnStore endpoints).
+- **File listing** / other `fs` methods (like `readdir`, `stat`) are **not** yet implemented. You can add them following a similar pattern (use `/files/ls` or `/files/stat` Enstore endpoints).
 - **Large Files**: For truly large files, ensure your server and network settings allow streaming without memory constraints. The streaming approach helps avoid loading the entire file in memory at once.
-- **Error Handling**: The library throws standard JavaScript errors if the EnStore server responds with an error, or if credentials are missing.
+- **Error Handling**: The library throws standard JavaScript errors if the Enstore server responds with an error, or if credentials are missing.
 
 ---
 

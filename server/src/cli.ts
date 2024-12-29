@@ -14,14 +14,14 @@ const program = new Command();
 
 program
   .name("enstore-server")
-  .description("CLI for EnStore Server")
+  .description("CLI for Enstore Server")
   .version("1.0.0");
 
 //-----------------------------------------------------
 // 1) enstore-server start
 //-----------------------------------------------------
 const startCmd = new Command("start")
-  .description("Start the EnStore server")
+  .description("Start the Enstore server")
   .option("-p, --port <port>", "Port to listen on", "3000")
   .option(
     "-d, --uploads-dir <path>",
@@ -58,7 +58,7 @@ const startCmd = new Command("start")
     app.use("/", createEnstoreMiddleware(config));
 
     const server = app.listen(port, () => {
-      console.log(`EnStore server running on port ${port}`);
+      console.log(`Enstore server running on port ${port}`);
       console.log(`Using userFile: ${userFilePath}`);
       console.log(`Uploads directory: ${uploadsDirectory}`);
     });

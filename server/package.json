@@ -1,6 +1,6 @@
 {
   "name": "@enstore/server",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Server component for Enstore file storage system",
   "main": "src/index.ts",
   "author": "Ricsam <oss@ricsam.dev>",

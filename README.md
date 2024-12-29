@@ -1,6 +1,6 @@
-# EnStore Project
+# Enstore Project
 
-**EnStore** is a **network file system**, **file server** and **file management ecosystem** built in Node.js (and Bun), enabling file-based operations with **authentication**, **authorization**, **role-based access control**, and **streaming** capabilities. The project is divided into **multiple packages**, each focusing on a specific domain:
+**Enstore** is a **network file system**, **file server** and **file management ecosystem** built in Node.js (and Bun), enabling file-based operations with **authentication**, **authorization**, **role-based access control**, and **streaming** capabilities. The project is divided into **multiple packages**, each focusing on a specific domain:
 
 1. **`@enstore/server`**
 
@@ -9,14 +9,14 @@
 
 2. **`@enstore/cli`**
 
-   - A command-line interface for interacting with an EnStore server.
+   - A command-line interface for interacting with an Enstore server.
    - Supports file listing, reading, writing, user management, and role management.
    - Credentials are stored locally in `~/.enstore/credentials.json` or specified via environment variables.
 
 3. **`@enstore/fs`**
-   - A Node.js–style filesystem API that **mounts** EnStore as if it were a local filesystem.
+   - A Node.js–style filesystem API that **mounts** Enstore as if it were a local filesystem.
    - Provides methods analogous to Node’s `fs` and `fs.promises`, including `createWriteStream`, `readFile`, `writeFile`.
-   - Perfect for directly integrating with EnStore servers as if they were local disks.
+   - Perfect for directly integrating with Enstore servers as if they were local disks.
 
 ## Features
 
@@ -26,8 +26,8 @@
   - **Role-based** permissions (`read`, `write`, `manageUsers`, etc.).
 - **Streaming**: Chunked uploads with `multer` or direct streaming forms.
 - **Multiple Deployment Modes**:
-  - **Express Middleware** – embed EnStore endpoints into an existing Express app
-  - **Standalone CLI** – quickly start an EnStore server with `enstore-server start`
+  - **Express Middleware** – embed Enstore endpoints into an existing Express app
+  - **Standalone CLI** – quickly start an Enstore server with `enstore-server start`
   - **Docker** – containerize everything, run with environment variables for dynamic user creation
 
 ---
@@ -47,7 +47,7 @@
 
 ## 2. @enstore/cli
 
-**`@enstore/cli`** is a command-line interface that interacts with any EnStore server.  
+**`@enstore/cli`** is a command-line interface that interacts with any Enstore server.  
 **Highlights**:
 
 - **`enstore login <endpoint> <username>`** to store credentials (endpoint, username, password) in `~/.enstore/credentials.json`.
@@ -62,7 +62,7 @@
 
 ## 3. @enstore/fs
 
-**`@enstore/fs`** provides a **Node.js `fs`–like** API for reading/writing files against an EnStore server.  
+**`@enstore/fs`** provides a **Node.js `fs`–like** API for reading/writing files against an Enstore server.  
 **Features**:
 
 - **`EnstoreFs`** with **`createWriteStream`** – stream file uploads chunk-by-chunk.
@@ -116,7 +116,7 @@ docker run -d \
 
 ## Contributing
 
-- **Bug Reports**: Please open an issue in the main EnStore repository.
+- **Bug Reports**: Please open an issue in the main Enstore repository.
 - **Features/PRs**: We welcome community contributions. Each package has its own subfolder – follow the code style and structure.
 
 **Areas** to contribute or expand:
@@ -129,5 +129,5 @@ docker run -d \
 
 ## License
 
-EnStore is licensed under the **MIT License**.  
+Enstore is licensed under the **MIT License**.  
 See [LICENSE](./LICENSE) for more details.

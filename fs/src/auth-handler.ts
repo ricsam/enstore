@@ -21,9 +21,9 @@ export class AuthHandler {
   public password: string;
   private credentialsFilePath?: string;
 
-  constructor(config: EnstoreCredentials) {
+  constructor(config?: EnstoreCredentials) {
     // 1) Use provided config
-    let { endpoint, username, password, credentialsFilePath } = config;
+    let { endpoint, username, password, credentialsFilePath } = config ?? {};
 
     this.credentialsFilePath = credentialsFilePath;
 

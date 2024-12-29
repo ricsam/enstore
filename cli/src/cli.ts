@@ -50,7 +50,7 @@ function resolveCredentials(): {
 const program = new Command();
 program
   .name("enstore")
-  .description("EnStore CLI - interact with the EnStore server")
+  .description("Enstore CLI - interact with the Enstore server")
   .version("1.0.0")
   .option(
     "-c, --credentials <path>",
@@ -123,7 +123,7 @@ const lsCmd = new Command("ls")
 
 const readCmd = new Command("read")
   .argument("<remotePath>", "Remote file path (relative to uploadDir root)")
-  .description("Read a file content from EnStore")
+  .description("Read a file content from Enstore")
   .action(async (remotePath: string) => {
     const credentials = resolveCredentials();
     const endpoint = credentials.endpoint;
@@ -146,7 +146,7 @@ const readCmd = new Command("read")
 const writeCmd = new Command("write")
   .argument("<localFile>", "Local file path to upload")
   .argument("[remoteDir]", "Remote directory (relative to uploadDir root)", "/")
-  .description("Upload/write a file to EnStore")
+  .description("Upload/write a file to Enstore")
   .action(async (localFile: string, remoteDir: string) => {
     const credentials = resolveCredentials();
 

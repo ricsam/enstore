@@ -1,5 +1,13 @@
 # @enstore/cli
 
+## 0.0.7
+
+### Patch Changes
+
+- Update readmes and change any EnStore spellings to Enstore
+- Updated dependencies
+  - @enstore/fs@0.0.7
+
 ## 0.0.6
 
 ### Patch Changes

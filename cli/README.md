@@ -1,6 +1,6 @@
 # @enstore/cli
 
-**`@enstore/cli`** is a command-line tool to interact with an [EnStore](https://github.com/ricsam/enstore) server for:
+**`@enstore/cli`** is a command-line tool to interact with an [Enstore](https://github.com/ricsam/enstore) server for:
 
 1. **File Operations**:  
    - `ls` (list files)  
@@ -87,7 +87,7 @@ enstore ls [dir]
 # Defaults to "/" if 'dir' is not specified
 ```
 
-Lists files in `[dir]` on the EnStore server. Uses loaded credentials to make an authorized request.
+Lists files in `[dir]` on the Enstore server. Uses loaded credentials to make an authorized request.
 
 ### **3) Read File (`read`)**
 

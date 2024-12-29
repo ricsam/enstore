@@ -1,6 +1,6 @@
 {
   "name": "@enstore/cli",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Command-line interface for Enstore file storage system",
   "main": "src/index.ts",
   "author": "Ricsam <oss@ricsam.dev>",
