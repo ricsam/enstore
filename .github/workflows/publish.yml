@@ -68,8 +68,7 @@ jobs:
           images: |
             ghcr.io/ricsam/enstore-server
           tags: |
-            type=sha
-            type=raw,alpha
+            type=ref
       - name: Build and push enstore-server
         uses: docker/build-push-action@v4
         with:

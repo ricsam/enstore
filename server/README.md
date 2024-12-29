@@ -80,15 +80,39 @@ docker pull ghcr.io/ricsam/enstore-server:latest
 **Example** run command:
 
 ```bash
-docker run -d \
-  -p 8080:3000 \
+docker run -d --rm --name enstore \
+  -p 3456:3000 \
   -v /host/path/users.json:/app/users.json \
   -v /host/path/uploads:/app/uploads \
-  ghcr.io/ricsam/enstore-server:latest \
-  start --port 3000 --users /app/users.json --uploads-dir /app/uploads
+  ghcr.io/ricsam/enstore-server:latest
 ```
 
-This starts Enstore inside a container listening on port 3000 (mapped to 8080 on the host).
+This starts Enstore inside a container listening on port 3000 (mapped to 3456 on the host). The internal port inside the docker container can be changed with the PORT env variable.
+
+An initial admin account can be provided instead of a users.json file:
+```bash
+docker run -d --rm --name enstore \
+  -p 3455:3000 \
+  -e ADMIN_USERNAME=admin \
+  -e ADMIN_PASSWORD=password \
+  ghcr.io/ricsam/enstore-server:latest
+```
+
+To run it in a docker compose file you can follow this example:
+```yml
+version: '3'
+
+services:
+  enstore:
+    image: 'ghcr.io/ricsam/enstore-server:latest'
+    environment:
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=password
+    ports:
+      - "3456:3000"
+    volumes:
+      - "./uploads:/app/uploads"
+```
 
 ---
 
