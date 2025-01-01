@@ -25,6 +25,6 @@
     "typedoc": "^0.27.6"
   },
   "devDependencies": {
-    "memfs": "4.15.2"
+    "memfs": "4.15.3"
   }
 }
