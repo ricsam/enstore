@@ -1,5 +1,12 @@
 # @enstore/cli
 
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies [e354234]
+  - @enstore/fs@0.0.8
+
 ## 0.0.7
 
 ### Patch Changes

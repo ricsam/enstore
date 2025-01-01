@@ -1,6 +1,6 @@
 {
   "name": "@enstore/fs",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "File system utilities for Enstore storage system",
   "main": "src/index.ts",
   "author": "Ricsam <oss@ricsam.dev>",

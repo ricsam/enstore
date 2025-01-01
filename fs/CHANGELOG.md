@@ -1,5 +1,11 @@
 # @enstore/fs
 
+## 0.0.8
+
+### Patch Changes
+
+- e354234: make promises a normal property of the EnstoreFs
+
 ## 0.0.7
 
 ### Patch Changes
