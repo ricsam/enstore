@@ -16,17 +16,14 @@ export interface EnstoreFsOptions extends EnstoreCredentials {
 }
 
 export class EnstoreFs extends AuthHandler {
-  public static promises: EnstorePromiseFs;
+  public promises: EnstorePromiseFs;
   public pathPrefix?: string;
 
   constructor(config?: EnstoreFsOptions) {
     super(config);
     this.pathPrefix = config?.pathPrefix;
     // Also attach a static instance of EnstorePromiseFs
-    if (!EnstoreFs.promises) {
-      // Create a new instance with the same config for convenience
-      EnstoreFs.promises = new EnstorePromiseFs(config);
-    }
+    this.promises = (this as any).promises ?? new EnstorePromiseFs(config);
   }
 
   public createWriteStream(remotePath: string): Writable {
