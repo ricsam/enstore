@@ -1,6 +1,8 @@
 import axios from "axios";
 import path from "path";
+import realFs from "fs";
 import { AuthHandler, EnstoreCredentials } from "./auth-handler";
+import { EnstoreFsOptions } from "./types";
 
 export interface ReadFileOptions {
   encoding?: BufferEncoding;
@@ -14,8 +16,10 @@ export interface WriteFileOptions {
 }
 
 export class EnstorePromiseFs extends AuthHandler {
-  constructor(config?: EnstoreCredentials) {
+  public pathPrefix?: string;
+  constructor(config?: EnstoreFsOptions) {
     super(config);
+    this.pathPrefix = config?.pathPrefix;
   }
 
   /**
@@ -34,11 +38,17 @@ export class EnstorePromiseFs extends AuthHandler {
       encoding = options.encoding;
     }
 
+    let prefixedRemotePath = remotePath;
+
+    if (this.pathPrefix) {
+      prefixedRemotePath = path.join(this.pathPrefix, remotePath);
+    }
+
     // -- Perform the actual HTTP GET to your Enstore server endpoint
     // e.g. GET /files/readFile?path=<remotePath>
     try {
       const resp = await axios.get(`${this.endpoint}/files/readFile`, {
-        params: { path: remotePath },
+        params: { path: prefixedRemotePath },
         auth: { username: this.username!, password: this.password! },
         responseType: "arraybuffer",
       });
@@ -76,25 +86,54 @@ export class EnstorePromiseFs extends AuthHandler {
       bufferData = data;
     }
 
+    let prefixedRemotePath = remotePath;
+
+    if (this.pathPrefix) {
+      prefixedRemotePath = path.join(this.pathPrefix, remotePath);
+    }
+
+
     // POST /files/writeFile?path=<remoteDir>
     // The Enstore server expects a multipart form-data with file content
     const FormData = (await import("form-data")).default;
     const form = new FormData();
     // We'll pass the final filename as whatever remotePath's basename is
-    const fileName = path.basename(remotePath);
+    const fileName = path.basename(prefixedRemotePath);
     form.append("file", bufferData, { filename: fileName });
 
     // remoteDir is the parent path (leading directories)
-    const parentDir = path.dirname(remotePath); // e.g. /nginx
-    const url = `${this.endpoint}/files/writeFile?path=${encodeURIComponent(parentDir)}`;
+    const parentDir = path.dirname(prefixedRemotePath); // e.g. /nginx
+    const url = `${this.endpoint}/files/writeFile`;
 
     try {
       await axios.post(url, form, {
+        params: { path: parentDir },
         auth: { username: this.username, password: this.password },
         headers: form.getHeaders(),
       });
     } catch (error: any) {
       throw new Error(`Error writing remote file: ${error?.message || error}`);
+    }
+  }
+
+  public async mkdir(
+    path: string,
+    options?: realFs.MakeDirectoryOptions & { recursive: true },
+  ): Promise<void> {
+    // POST /files/mkdir?path=<remoteDir>
+    try {
+      await axios.post(
+        `${this.endpoint}/files/mkdir`,
+        { options },
+        {
+          auth: { username: this.username, password: this.password },
+          params: { path },
+        },
+      );
+    } catch (error: any) {
+      throw new Error(
+        `Error creating remote directory: ${error?.message || error}`,
+      );
     }
   }
 }

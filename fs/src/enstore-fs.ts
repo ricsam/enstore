@@ -1,18 +1,15 @@
-import { AuthHandler, EnstoreCredentials } from "./auth-handler";
+import { AuthHandler } from "./auth-handler";
 import axios from "axios";
 import { PassThrough, Readable, Writable } from "stream";
 import path from "path";
 import FormData from "form-data";
 import { EnstorePromiseFs } from "./enstore-promise-fs";
+import { EnstoreFsOptions } from "./types";
 
 export interface CreateWriteStreamOptions {
   encoding?: BufferEncoding;
   flags?: string;
   mode?: number;
-}
-
-export interface EnstoreFsOptions extends EnstoreCredentials {
-  pathPrefix?: string;
 }
 
 export class EnstoreFs extends AuthHandler {

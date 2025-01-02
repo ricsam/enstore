@@ -96,4 +96,19 @@ describe("EnstoreFs", () => {
     });
     expect(data).toBe("This is a file on the server");
   });
+
+
+  it('should mkdir, writeFile, and readFile via enstoreFs.promises.*', async () => {
+    await enFs.promises.mkdir('/myDir'); 
+    const filePath = '/myDir/hello.txt';
+    const fileContent = 'Hello from Jest!';
+    await enFs.promises.writeFile(filePath, fileContent, 'utf-8');
+
+    const readData = await enFs.promises.readFile(filePath, 'utf-8');
+    expect(readData).toBe(fileContent);
+
+    const actualFilePath = path.join('/uploads', 'somePrefix/myDir', 'hello.txt');
+    const memfsData = fs.readFileSync(actualFilePath, 'utf-8');
+    expect(memfsData).toEqual(fileContent);
+  });
 });

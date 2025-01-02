@@ -1,4 +1,11 @@
-import { beforeAll, beforeEach, describe, expect, it } from "bun:test";
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from "bun:test";
 import express from "express";
 import path from "path";
 import request from "supertest";
@@ -10,6 +17,29 @@ import { authMiddleware } from "../src/middleware/auth-middleware";
 import { fileRoutes } from "../src/routes/file-routes";
 import fs from "fs";
 
+const testUsername = "testUser";
+const testPassword = "testPassword";
+const bcryptHash =
+  "$2b$10$KjiYs45ypzGQdTeBmV2J3.uHD7AXcaIei0G1uimcTL5g2hxjf5D/O"; // Bcrypt hash for 'testPassword'
+const initUser = {
+  users: [
+    {
+      username: testUsername,
+      hashedPassword: bcryptHash,
+      role: "read-write",
+    },
+    {
+      username: 'readUser',
+      hashedPassword: bcryptHash,
+      role: "read-only",
+    },
+  ],
+  roles: {
+    "read-write": ["read", "write"],
+    "read-only": ["read"],
+  },
+};
+
 describe("File Routes Tests", () => {
   const app = express();
   app.use(bodyParser.json());
@@ -19,32 +49,11 @@ describe("File Routes Tests", () => {
   let userStore: UserStore;
   let authService: AuthService;
 
-  const testUsername = "testUser";
-  const testPassword = "testPassword";
-  const bcryptHash =
-    "$2b$10$KjiYs45ypzGQdTeBmV2J3.uHD7AXcaIei0G1uimcTL5g2hxjf5D/O"; // Bcrypt hash for 'testPassword'
-
   beforeAll(() => {
     // Prepare initial user store
-    const initialData = {
-      users: [
-        {
-          username: testUsername,
-          hashedPassword: bcryptHash,
-          role: "read-write",
-        },
-      ],
-      roles: {
-        "read-write": ["read", "write"],
-      },
-    };
 
     fs.mkdirSync(path.dirname(userFilePath), { recursive: true });
-    fs.writeFileSync(
-      userFilePath,
-      JSON.stringify(initialData, null, 2),
-      "utf-8",
-    );
+    fs.writeFileSync(userFilePath, JSON.stringify(initUser, null, 2), "utf-8");
 
     userStore = new UserStore(userFilePath);
     authService = new AuthService(userStore);
@@ -84,7 +93,9 @@ describe("File Routes Tests", () => {
   });
 
   const basicAuthHeader = () => {
-    const token = Buffer.from(`${testUsername}:${testPassword}`).toString("base64");
+    const token = Buffer.from(`${testUsername}:${testPassword}`).toString(
+      "base64",
+    );
     return `Basic ${token}`;
   };
 
@@ -124,7 +135,10 @@ describe("File Routes Tests", () => {
       .expect(200);
 
     expect(res.body.message).toBe("File uploaded successfully");
-    const uploadedData = fs.readFileSync(path.join("/uploads", testFileName), "utf-8");
+    const uploadedData = fs.readFileSync(
+      path.join("/uploads", testFileName),
+      "utf-8",
+    );
     expect(uploadedData).toBe(fileContent);
   });
 
@@ -139,18 +153,55 @@ describe("File Routes Tests", () => {
 
     expect(res.body.message).toBe("File uploaded successfully");
 
-    const nestedFile = fs.readFileSync("/uploads/some/nested/path/upload.txt", "utf-8");
+    const nestedFile = fs.readFileSync(
+      "/uploads/some/nested/path/upload.txt",
+      "utf-8",
+    );
     expect(nestedFile).toBe(fileContent);
   });
 
   it("should fail if requesting outside /uploads", async () => {
     // Attempt to read a file outside the root
-    const outOfBoundPath = "/../etc/passwd"; 
+    const outOfBoundPath = "/../etc/passwd";
     const res = await request(app)
       .get(`/files/readFile?path=${outOfBoundPath}`)
       .set("Authorization", basicAuthHeader())
       .expect(403);
 
     expect(res.body.error).toMatch(/Permission denied/);
+  });
+
+  it("should create a directory using POST /files/mkdir with write permission", async () => {
+    // 4) We do Basic Auth for the testUser (assuming your server expects that)
+    const authHeader =
+      "Basic " + Buffer.from("testUser:testPassword").toString("base64");
+
+    const dirToCreate = "/myNewDir";
+
+    const res = await request(app)
+      .post("/files/mkdir?path=" + dirToCreate)
+      .set("Authorization", authHeader)
+      .expect(200);
+
+    const dirPathOnServer = path.join("/uploads", dirToCreate);
+    expect(res.body.message).toContain(`Directory created: ${dirPathOnServer}`);
+
+    const stat = fs.statSync(dirPathOnServer);
+    expect(stat.isDirectory()).toBe(true);
+  });
+
+  it('should fail without "write" permission', async () => {
+    // Now let's attempt mkdir with readUser
+    const authHeader =
+      "Basic " + Buffer.from("readUser:" + testPassword).toString("base64");
+    const dirToCreate = "/noWriteDir";
+
+    const res = await request(app)
+      .post("/files/mkdir")
+      .set("Authorization", authHeader)
+      .send({ path: dirToCreate })
+      .expect(403);
+
+    expect(res.body.error).toMatch(/Forbidden/);
   });
 });

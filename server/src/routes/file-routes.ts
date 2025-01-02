@@ -137,6 +137,10 @@ export function fileRoutes(
       // Final path (directory + filename)
       const finalPath = path.join(targetDir, originalname);
 
+      if (!finalPath.startsWith(rootDir)) {
+        res.status(403).json({ error: `Permission denied: path "${finalPath}" escapes uploads directory.` });
+      }
+
       fs.rename(tempPath, finalPath, (err) => {
         if (err) {
           return res.status(500).json({ error: err.message });
@@ -147,6 +151,33 @@ export function fileRoutes(
         });
       });
     },
+  );
+
+  router.post(
+    '/mkdir',
+    authorizePermission(authService, 'write'),
+    (req: Request, res: Response) => {
+      const dirPath = (req.query.path as string);
+      if (!dirPath) {
+        return res.status(400).json({ error: 'Missing directory path' });
+      }
+
+      let targetDir: string;
+      try {
+        targetDir = resolveSafePath(dirPath);
+      } catch (error) {
+        // If user tries to escape outside rootDir
+        res.status(403).json({ error: (error as Error).message });
+        return;
+      }
+
+      try {
+        fs.mkdirSync(targetDir, req.body.options);
+        return res.json({ message: `Directory created: ${targetDir}` });
+      } catch (error) {
+        return res.status(500).json({ error: (error as Error).message });
+      }
+    }
   );
 
   return router;
