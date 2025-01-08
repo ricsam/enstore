@@ -61,6 +61,10 @@ RUN chmod +x /app/docker-entrypoint.sh
 ENV PORT=3000
 EXPOSE 3000/tcp
 
+RUN mkdir -p /app/uploads
+
+WORKDIR /app
+
 # This script checks ADMIN_USERNAME / ADMIN_PASSWORD, 
 # adds an admin user if provided, then runs enstore-server start
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
