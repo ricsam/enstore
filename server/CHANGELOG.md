@@ -1,5 +1,11 @@
 # @enstore/server
 
+## 0.0.6
+
+### Patch Changes
+
+- stream the upload to the destination
+
 ## 0.0.5
 
 ### Patch Changes
