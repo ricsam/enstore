@@ -22,7 +22,7 @@
   "dependencies": {
     "prettier": "3.5.3",
     "@changesets/cli": "^2.27.10",
-    "typedoc": "^0.27.6"
+    "typedoc": "^0.28.0"
   },
   "devDependencies": {
     "memfs": "4.17.0"
