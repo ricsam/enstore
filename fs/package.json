@@ -27,7 +27,7 @@
     "@swc/cli": "0.6.0",
     "@swc/core": "1.11.13",
     "typescript": "5.8.2",
-    "@types/bun": "1.2.5",
+    "@types/bun": "1.2.12",
     "@types/axios": "0.14.4",
     "@types/form-data": "2.5.2",
     "express": "4.21.2",
