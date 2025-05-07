@@ -24,8 +24,8 @@
     "form-data": "^4.0.1"
   },
   "devDependencies": {
-    "@swc/cli": "0.6.0",
-    "@swc/core": "1.11.13",
+    "@swc/cli": "0.7.5",
+    "@swc/core": "1.11.24",
     "typescript": "5.8.2",
     "@types/bun": "1.2.5",
     "@types/axios": "0.14.4",
