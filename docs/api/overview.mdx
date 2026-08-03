@@ -1,0 +1,49 @@
+---
+title: HTTP API overview
+description: Call Enstore routes directly with HTTP Basic authentication.
+---
+
+The HTTP API is mounted at the path selected by the host application. The standalone server mounts it at `/`.
+
+## Base URL
+
+Examples in this section use:
+
+```text
+http://localhost:3000
+```
+
+If Express mounts the router at `/enstore`, use `http://localhost:3000/enstore` instead.
+
+## Authentication
+
+Except for `/healthz`, routes require Basic Auth:
+
+```bash
+curl --user alice:secret \
+  'http://localhost:3000/files/ls?dir=/'
+```
+
+## Content types
+
+- File uploads use `multipart/form-data` with a part named `file`.
+- User, role, and directory requests use JSON.
+- File reads return the raw file stream.
+- Other successful responses return JSON.
+
+## Health check
+
+```bash
+curl http://localhost:3000/healthz
+```
+
+```json
+{
+  "status": "ok",
+  "encacheVersion": "1.0.0"
+}
+```
+
+<Info>
+  The health response currently uses the field name `encacheVersion` for the server version.
+</Info>

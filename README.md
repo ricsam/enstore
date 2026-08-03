@@ -114,6 +114,18 @@ docker run -d \
 
 ---
 
+## Documentation
+
+The Mintlify documentation source lives in [`docs/`](./docs). Preview and validate it from the repository root:
+
+```bash
+bun run docs
+bun run docs:check
+bun run docs:links
+```
+
+---
+
 ## Contributing
 
 - **Bug Reports**: Please open an issue in the main Enstore repository.

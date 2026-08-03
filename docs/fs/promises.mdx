@@ -1,0 +1,48 @@
+---
+title: Promise API
+description: Read, write, and create remote content with EnstorePromiseFs.
+---
+
+Access promise methods through an `EnstoreFs` instance or instantiate `EnstorePromiseFs` directly.
+
+```ts
+import { EnstorePromiseFs } from '@enstore/fs';
+
+const fs = new EnstorePromiseFs({
+  endpoint: 'https://storage.example.com',
+  username: 'alice',
+  password: process.env.ENSTORE_PASSWORD,
+});
+```
+
+## Read files
+
+Without an encoding, `readFile` returns a `Buffer`:
+
+```ts
+const bytes = await fs.readFile('/images/logo.png');
+```
+
+Pass an encoding string or options object to return text:
+
+```ts
+const first = await fs.readFile('/notes/todo.txt', 'utf8');
+const second = await fs.readFile('/notes/todo.txt', { encoding: 'utf8' });
+```
+
+## Write files
+
+```ts
+await fs.writeFile('/notes/todo.txt', 'Ship docs\n', 'utf8');
+await fs.writeFile('/data/item.bin', Buffer.from([1, 2, 3]));
+```
+
+Parent directories are represented by the remote path. Create them first if needed, or ensure the server upload flow can create the target directory.
+
+## Create directories
+
+```ts
+await fs.mkdir('/notes/archive', { recursive: true });
+```
+
+Network and server failures reject the promise with an `Error`.

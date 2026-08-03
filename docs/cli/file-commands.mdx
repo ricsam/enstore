@@ -1,0 +1,58 @@
+---
+title: File commands
+description: List, read, upload, and organize remote files with the Enstore CLI.
+---
+
+All commands use the configured [credentials](/cli/credentials).
+
+## List a directory
+
+```bash
+enstore ls [directory]
+```
+
+The directory defaults to `/`:
+
+```bash
+enstore ls /documents
+```
+
+## Read a file
+
+```bash
+enstore read /documents/notes.txt
+```
+
+File content is written to standard output, so it can be redirected:
+
+```bash
+enstore read /exports/report.csv > report.csv
+```
+
+## Upload a file
+
+```bash
+enstore write <local-file> [remote-directory]
+```
+
+The remote directory defaults to `/`. The local basename becomes the remote filename.
+
+```bash
+enstore write ./report.pdf /documents/reports
+```
+
+## Create a directory
+
+```bash
+enstore mkdir /documents/reports --recursive
+```
+
+You can also provide an octal mode:
+
+```bash
+enstore mkdir /private --mode 700
+```
+
+<Note>
+  `mkdir` requires the `write` permission. Use `--recursive` when parent directories do not exist.
+</Note>

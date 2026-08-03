@@ -1,0 +1,46 @@
+---
+title: Architecture
+description: Understand the Enstore server, storage, authentication, and client packages.
+---
+
+Enstore uses a small HTTP server as the boundary between clients and files on disk.
+
+```text
+CLI / Node.js client / HTTP client
+                 |
+          HTTP Basic Auth
+                 |
+        @enstore/server routes
+          /files      /users
+             |           |
+      uploads directory  users.json
+```
+
+## Server
+
+`@enstore/server` creates an Express router. It validates Basic Auth credentials, checks permissions, resolves remote paths beneath the configured uploads directory, and streams data to or from disk.
+
+The health endpoint is mounted before authentication:
+
+```bash
+curl http://localhost:3000/healthz
+```
+
+## Persistent data
+
+Enstore has two persistent locations:
+
+- **Uploads directory** — contains all remote files and directories.
+- **User file** — a JSON document containing users, bcrypt password hashes, roles, and permissions.
+
+The server creates the uploads directory and the parent directory of the user file when necessary.
+
+## Clients
+
+- `@enstore/cli` translates terminal commands into HTTP requests.
+- `@enstore/fs` exposes promise and stream APIs inspired by Node.js `fs`.
+- Any HTTP client can use the [HTTP API](/api/overview) directly.
+
+## Path safety
+
+File routes resolve requested paths beneath the configured uploads root. Requests that resolve outside that root are rejected. Clients should still send normalized remote paths such as `/documents/report.pdf`.

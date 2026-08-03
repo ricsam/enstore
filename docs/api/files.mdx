@@ -1,0 +1,63 @@
+---
+title: File endpoints
+description: List directories, read files, upload files, and create directories over HTTP.
+---
+
+## List a directory
+
+`GET /files/ls` requires `read`.
+
+```bash
+curl --user alice:secret \
+  --get \
+  --data-urlencode 'dir=/documents' \
+  http://localhost:3000/files/ls
+```
+
+```json
+{
+  "files": ["notes.txt", "reports"]
+}
+```
+
+## Read a file
+
+`GET /files/readFile` requires `read` and returns the raw file body.
+
+```bash
+curl --user alice:secret \
+  --get \
+  --data-urlencode 'path=/documents/notes.txt' \
+  http://localhost:3000/files/readFile
+```
+
+## Upload a file
+
+`POST /files/writeFile` requires `write`. Set `path` to the destination directory and send a multipart part named `file`.
+
+```bash
+curl --user alice:secret \
+  --form 'file=@./report.pdf' \
+  'http://localhost:3000/files/writeFile?path=%2Fdocuments'
+```
+
+```json
+{
+  "message": "File uploaded successfully",
+  "fileName": "report.pdf"
+}
+```
+
+## Create a directory
+
+`POST /files/mkdir` requires `write`.
+
+```bash
+curl --user alice:secret \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{"options":{"recursive":true,"mode":493}}' \
+  'http://localhost:3000/files/mkdir?path=%2Fdocuments%2Freports'
+```
+
+`493` is decimal for octal mode `0755`.

@@ -1,0 +1,48 @@
+---
+title: Node.js client overview
+description: Access Enstore through familiar promise and stream APIs from Node.js or Bun.
+---
+
+Install the filesystem client:
+
+```bash
+npm install @enstore/fs
+```
+
+Create a client with explicit credentials:
+
+```ts
+import { EnstoreFs } from '@enstore/fs';
+
+const enstore = new EnstoreFs({
+  endpoint: 'https://storage.example.com',
+  username: 'alice',
+  password: process.env.ENSTORE_PASSWORD,
+});
+```
+
+`EnstoreFs` exposes streaming methods and a `promises` property:
+
+```ts
+await enstore.promises.mkdir('/reports', { recursive: true });
+await enstore.promises.writeFile('/reports/summary.txt', 'Ready\n', 'utf8');
+
+const summary = await enstore.promises.readFile(
+  '/reports/summary.txt',
+  'utf8',
+);
+
+console.log(summary);
+```
+
+## Available methods
+
+| API | Method | Result |
+| --- | --- | --- |
+| Promises | `readFile(path, options?)` | `Promise<Buffer \| string>` |
+| Promises | `writeFile(path, data, options?)` | `Promise<void>` |
+| Promises | `mkdir(path, options?)` | `Promise<void>` |
+| Streams | `createReadStream(path)` | `Readable` |
+| Streams | `createWriteStream(path)` | `Writable` |
+
+The API is inspired by Node.js `fs`, but it is not a complete drop-in replacement.

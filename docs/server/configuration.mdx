@@ -1,0 +1,52 @@
+---
+title: Server configuration
+description: Configure server ports, upload storage, the user store, and mounted route paths.
+---
+
+Enstore's standalone command accepts three runtime settings.
+
+## Port
+
+Set the listening port with `--port`:
+
+```bash
+enstore-server start --port 8080
+```
+
+## Upload storage
+
+Set the root for remote files with `--uploads-dir`:
+
+```bash
+enstore-server start --uploads-dir /srv/enstore/uploads
+```
+
+All paths requested through `/files` are resolved beneath this root. Enstore creates the directory if it does not exist.
+
+## User store
+
+Choose the users and roles file with `--users`:
+
+```bash
+enstore-server start --users /etc/enstore/users.json
+```
+
+If omitted, the standalone server uses `~/.enstore/users.json`. Manage its contents with [local user and role commands](/server/users-and-roles).
+
+## Route prefix
+
+The standalone server mounts Enstore at `/`. When embedding the router, the host application controls the prefix:
+
+```ts
+app.use('/storage', createEnstoreMiddleware(config));
+```
+
+Clients must then include the prefix in their endpoint, for example `https://example.com/storage`.
+
+## Production recommendations
+
+- Terminate TLS in the application or a trusted reverse proxy.
+- Restrict read and write access to the configured upload and user-store locations.
+- Back up the uploads directory and user file together.
+- Avoid placing `users.json` inside a publicly served directory.
+- Use a persistent volume when running the Docker image.

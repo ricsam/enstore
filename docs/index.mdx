@@ -1,0 +1,42 @@
+---
+title: Enstore documentation
+description: Secure, self-hosted file storage with an HTTP server, CLI, and Node.js filesystem client.
+---
+
+Enstore is a file management toolkit for storing and accessing files over HTTP. It combines a self-hosted server, role-based access control, a command-line client, and a familiar Node.js filesystem interface.
+
+<CardGroup cols={3}>
+  <Card title="Run the server" icon="server" href="/server/installation">
+    Start Enstore from the CLI, embed it in Express, or deploy its Docker image.
+  </Card>
+  <Card title="Use the CLI" icon="terminal" href="/cli/installation">
+    List, read, upload, and organize files from your terminal.
+  </Card>
+  <Card title="Add the Node.js client" icon="code" href="/fs/overview">
+    Work with remote files through promise and stream APIs.
+  </Card>
+</CardGroup>
+
+## What Enstore provides
+
+- **File operations** — list directories, read files, create directories, and upload content.
+- **HTTP Basic authentication** — authenticate every protected request with a username and password.
+- **Role-based access control** — assign `read`, `write`, and `manageUsers` permissions through customizable roles.
+- **Multiple deployment modes** — use a standalone command, Express middleware, or Docker.
+- **Multiple clients** — use the `enstore` CLI, call the HTTP API, or install `@enstore/fs`.
+
+## Packages
+
+| Package | Purpose |
+| --- | --- |
+| `@enstore/server` | Express middleware and the `enstore-server` executable |
+| `@enstore/cli` | The `enstore` command for remote file and access management |
+| `@enstore/fs` | Node.js-style promise and stream APIs for remote files |
+
+<Note>
+  Enstore stores uploaded content on disk and stores users and roles in a JSON file. Back up both locations when operating a production server.
+</Note>
+
+## Next step
+
+Follow the [quickstart](/quickstart) to run a local server and upload your first file.

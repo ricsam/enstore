@@ -1,0 +1,56 @@
+---
+title: User and role endpoints
+description: Administer Enstore identities and role permissions over HTTP.
+---
+
+All routes on this page require `manageUsers`.
+
+## Create a user
+
+```bash
+curl --user admin:secret \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{"username":"alice","password":"new-secret","role":"read-write"}' \
+  http://localhost:3000/users
+```
+
+## Update or delete a user
+
+```bash
+curl --user admin:secret \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{"role":"read-only"}' \
+  http://localhost:3000/users/alice
+
+curl --user admin:secret \
+  --request DELETE \
+  http://localhost:3000/users/alice
+```
+
+The update body may contain `role`, `password`, or both.
+
+## Create a role
+
+```bash
+curl --user admin:secret \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --data '{"role":"editor","permissions":["read","write"]}' \
+  http://localhost:3000/users/roles
+```
+
+## Update or delete a role
+
+```bash
+curl --user admin:secret \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{"permissions":["read"]}' \
+  http://localhost:3000/users/roles/editor
+
+curl --user admin:secret \
+  --request DELETE \
+  http://localhost:3000/users/roles/editor
+```

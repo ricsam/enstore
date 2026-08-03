@@ -7,7 +7,10 @@
   "author": "Ricsam <oss@ricsam.dev>",
   "license": "MIT",
   "scripts": {
-    "docs": "typedoc --out docs --tsconfig tsconfig.json --name enstore --entryPoints fs/src/index.ts --entryPoints server/src/index.ts",
+    "docs": "cd docs && bun x mint@latest dev",
+    "docs:check": "cd docs && bun x mint@latest validate",
+    "docs:links": "cd docs && bun x mint@latest broken-links",
+    "docs:api": "typedoc --out typedoc --tsconfig tsconfig.json --name enstore --entryPoints fs/src/index.ts --entryPoints server/src/index.ts",
     "typecheck": "bun --filter '*' typecheck"
   },
   "repository": {

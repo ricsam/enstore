@@ -1,0 +1,47 @@
+---
+title: Manage local users and roles
+description: Modify users.json without running an Enstore server.
+---
+
+The `enstore-server user` commands edit the local user store. Add `--users <path>` to select a store; otherwise Enstore uses `~/.enstore/users.json`.
+
+## Users
+
+```bash
+# Add a user and prompt for a password
+enstore-server user add alice read-write --users ./users.json
+
+# Change a role
+enstore-server user update alice --role read-only --users ./users.json
+
+# Prompt for a replacement password
+enstore-server user update alice --password --users ./users.json
+
+# Delete a user
+enstore-server user delete alice --users ./users.json
+```
+
+## Roles
+
+```bash
+# Create or replace a role
+enstore-server user add-role editor read write --users ./users.json
+
+# Update an existing role
+enstore-server user update-role editor read --users ./users.json
+
+# Delete a role
+enstore-server user delete-role editor --users ./users.json
+```
+
+## Built-in permission names
+
+| Permission | Protected operations |
+| --- | --- |
+| `read` | `/files/ls`, `/files/readFile` |
+| `write` | `/files/writeFile`, `/files/mkdir` |
+| `manageUsers` | All `/users` and `/users/roles` mutations |
+
+<Warning>
+  Before deleting a role, move any users assigned to it to another role.
+</Warning>

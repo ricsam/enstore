@@ -1,0 +1,50 @@
+---
+title: Authentication and authorization
+description: Learn how Basic Auth credentials, users, roles, and permissions protect Enstore.
+---
+
+Enstore uses HTTP Basic authentication and role-based authorization.
+
+## Authentication
+
+Protected requests include a username and password in the `Authorization` header. The server compares the supplied password with the user's bcrypt hash in `users.json`.
+
+```bash
+curl --user admin:secret \
+  'http://localhost:3000/files/ls?dir=/'
+```
+
+<Warning>
+  Basic Auth does not encrypt credentials. Use HTTPS whenever the server is reachable over an untrusted network.
+</Warning>
+
+## Authorization
+
+Each user references a role. Each role grants one or more permissions:
+
+| Permission | Allows |
+| --- | --- |
+| `read` | List directories and read files |
+| `write` | Upload files and create directories |
+| `manageUsers` | Create, update, and delete users and roles |
+
+A typical user store looks like this:
+
+```json
+{
+  "users": [
+    {
+      "username": "admin",
+      "hashedPassword": "$2b$10$...",
+      "role": "admin"
+    }
+  ],
+  "roles": {
+    "admin": ["read", "write", "manageUsers"],
+    "read-write": ["read", "write"],
+    "read-only": ["read"]
+  }
+}
+```
+
+Never write plaintext passwords into this file. Use the server CLI to generate bcrypt hashes and modify the store safely.

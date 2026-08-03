@@ -1,0 +1,57 @@
+---
+title: Develop Enstore
+description: Set up the Bun workspace, run checks, and preview the Mintlify documentation.
+---
+
+Enstore is a Bun workspace containing `server`, `cli`, and `fs` packages.
+
+## Install dependencies
+
+```bash
+git clone https://github.com/ricsam/enstore.git
+cd enstore
+bun install
+```
+
+## Run checks
+
+```bash
+bun test
+bun run typecheck
+```
+
+## Preview these docs
+
+The Mintlify source lives in `docs/`.
+
+```bash
+bun run docs
+```
+
+The preview is served at `http://localhost:3000` by default and reloads when MDX files change.
+
+Validate the docs and check internal links before opening a pull request:
+
+```bash
+bun run docs:check
+bun run docs:links
+```
+
+## Generate TypeDoc output
+
+The existing API documentation generator remains available separately:
+
+```bash
+bun run docs:api
+```
+
+It writes generated TypeDoc output to `typedoc/`, which is ignored by Git.
+
+## Repository layout
+
+```text
+cli/       Remote command-line client
+fs/        Node.js-style filesystem client
+server/    Express server and standalone executable
+docs/      Mintlify documentation source
+```

@@ -1,0 +1,44 @@
+---
+title: Troubleshooting
+description: Resolve common Enstore server, credentials, permissions, and upload problems.
+---
+
+## Missing credentials
+
+If a CLI or `@enstore/fs` command reports missing credentials, provide all three values: endpoint, username, and password.
+
+```bash
+enstore login http://localhost:3000 admin
+```
+
+Or set `ENSTORE_ENDPOINT`, `ENSTORE_USERNAME`, and `ENSTORE_PASSWORD`.
+
+## Unauthorized requests
+
+A `401` response means authentication failed. Confirm:
+
+- The endpoint includes any Express mount prefix.
+- The username exists in the configured `users.json`.
+- The password matches the current bcrypt hash.
+- A reverse proxy forwards the `Authorization` header.
+
+## Forbidden requests
+
+A `403` usually means the user's role lacks the route permission. Listing and reading need `read`; uploads and directories need `write`; access management needs `manageUsers`.
+
+## Missing files or directories
+
+Remote paths are relative to the uploads root and generally begin with `/`. Confirm the server was started with the expected `--uploads-dir` and list the parent directory first.
+
+```bash
+enstore ls /
+enstore ls /documents
+```
+
+## Docker data disappears
+
+Mount persistent storage at `/app` so both `/app/uploads` and `/app/users.json` survive container replacement.
+
+## Stream errors
+
+Always register an `error` listener on streams returned by `@enstore/fs`. For uploads, listen for the custom `uploaded` event to know that the HTTP request completed successfully.

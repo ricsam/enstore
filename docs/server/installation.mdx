@@ -1,0 +1,46 @@
+---
+title: Install and start the server
+description: Install @enstore/server and run a standalone Enstore instance.
+---
+
+## Install globally
+
+```bash
+npm install -g @enstore/server
+```
+
+This installs the `enstore-server` executable.
+
+## Create the first administrator
+
+Before starting a protected server, initialize a role and user:
+
+```bash
+enstore-server user add-role admin read write manageUsers --users ./users.json
+enstore-server user add admin admin --users ./users.json
+```
+
+## Start the server
+
+```bash
+enstore-server start \
+  --port 3000 \
+  --users ./users.json \
+  --uploads-dir ./uploads
+```
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `-p, --port <port>` | `3000` | HTTP listening port |
+| `--users <path>` | `~/.enstore/users.json` | User and role store |
+| `-d, --uploads-dir <path>` | `./uploads` | Root directory for stored files |
+
+## Verify the process
+
+The health route does not require authentication:
+
+```bash
+curl http://localhost:3000/healthz
+```
+
+A healthy server returns a JSON object whose `status` is `ok`.

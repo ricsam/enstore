@@ -1,0 +1,37 @@
+---
+title: Remote access management
+description: Create, update, and remove server users and roles through the client CLI.
+---
+
+These commands call the running server and require the authenticated account to have `manageUsers`.
+
+## Users
+
+```bash
+# Create a user and prompt for a password
+enstore user add bob read-write
+
+# Change the user's role
+enstore user update bob --role read-only
+
+# Prompt for a new password
+enstore user update bob --password
+
+# Update both at once
+enstore user update bob --role read-write --password
+
+# Delete the user
+enstore user delete bob
+```
+
+## Roles
+
+Use `role update` as an upsert: it sends the complete permission list for the role.
+
+```bash
+enstore role update editor read write
+enstore role update auditor read
+enstore role delete auditor
+```
+
+The server recognizes `read`, `write`, and `manageUsers` in its route authorization checks.

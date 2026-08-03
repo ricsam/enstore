@@ -1,0 +1,52 @@
+---
+title: Stream API
+description: Stream large files to and from Enstore without buffering the entire payload.
+---
+
+`EnstoreFs` provides Node.js `Readable` and `Writable` streams.
+
+## Upload a stream
+
+```ts
+import { createReadStream } from 'node:fs';
+import { EnstoreFs } from '@enstore/fs';
+
+const remote = new EnstoreFs({
+  endpoint: 'https://storage.example.com',
+  username: 'alice',
+  password: process.env.ENSTORE_PASSWORD,
+});
+
+const source = createReadStream('./large-backup.tar');
+const destination = remote.createWriteStream('/backups/large-backup.tar');
+
+source.pipe(destination);
+
+destination.on('uploaded', () => {
+  console.log('Upload complete');
+});
+
+destination.on('error', (error) => {
+  console.error('Upload failed', error);
+});
+```
+
+The client sends multipart form data while content is written to the stream.
+
+## Download a stream
+
+```ts
+import { createWriteStream } from 'node:fs';
+
+const source = remote.createReadStream('/backups/large-backup.tar');
+const destination = createWriteStream('./restored.tar');
+
+source.pipe(destination);
+source.on('error', (error) => {
+  console.error('Download failed', error);
+});
+```
+
+<Note>
+  Attach an `error` listener before transferring data so request failures do not become unhandled stream errors.
+</Note>

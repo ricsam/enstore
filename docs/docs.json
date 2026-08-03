@@ -1,0 +1,100 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Enstore",
+  "description": "A secure file server, CLI, and Node.js filesystem client",
+  "colors": {
+    "primary": "#0F766E",
+    "light": "#14B8A6",
+    "dark": "#5EEAD4"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get started",
+        "pages": [
+          "index",
+          "quickstart",
+          "concepts/architecture",
+          "concepts/authentication"
+        ]
+      },
+      {
+        "group": "Server",
+        "pages": [
+          "server/installation",
+          "server/configuration",
+          "server/express",
+          "server/docker",
+          "server/users-and-roles"
+        ]
+      },
+      {
+        "group": "CLI",
+        "pages": [
+          "cli/installation",
+          "cli/credentials",
+          "cli/file-commands",
+          "cli/access-control"
+        ]
+      },
+      {
+        "group": "Node.js client",
+        "pages": [
+          "fs/overview",
+          "fs/promises",
+          "fs/streams",
+          "fs/configuration"
+        ]
+      },
+      {
+        "group": "HTTP API",
+        "pages": [
+          "api/overview",
+          "api/files",
+          "api/users-and-roles",
+          "api/errors"
+        ]
+      },
+      {
+        "group": "Resources",
+        "pages": [
+          "development",
+          "troubleshooting"
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "icon": "github",
+          "href": "https://github.com/ricsam/enstore"
+        }
+      ]
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "npm",
+        "href": "https://www.npmjs.com/org/enstore"
+      }
+    ],
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/ricsam/enstore"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/ricsam/enstore"
+    }
+  },
+  "seo": {
+    "metatags": {
+      "og:type": "website",
+      "og:site_name": "Enstore Documentation"
+    }
+  }
+}

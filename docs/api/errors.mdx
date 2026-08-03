@@ -1,0 +1,40 @@
+---
+title: API errors
+description: Handle Enstore HTTP error responses and diagnose common failures.
+---
+
+Most route errors return JSON with an `error` string:
+
+```json
+{
+  "error": "Directory not found"
+}
+```
+
+## Common status codes
+
+| Status | Typical cause |
+| --- | --- |
+| `400 Bad Request` | Missing query/body data, invalid directory, or missing uploaded file |
+| `401 Unauthorized` | Missing or invalid Basic Auth credentials |
+| `403 Forbidden` | The user's role lacks permission or a path escapes the upload root |
+| `404 Not Found` | The requested file or directory does not exist |
+| `500 Internal Server Error` | Filesystem, user-store, or unexpected server failure |
+
+## Inspect errors with curl
+
+Include response headers and fail on non-success status codes:
+
+```bash
+curl --fail-with-body --include \
+  --user alice:secret \
+  'http://localhost:3000/files/ls?dir=%2Fmissing'
+```
+
+## Client behavior
+
+- The CLI prints the server response or network error to standard error.
+- Promise APIs in `@enstore/fs` reject with an `Error`.
+- Stream APIs emit an `error` event.
+
+When troubleshooting authorization, first verify the user's role in `users.json`, then verify that the role contains the permission required by the endpoint.

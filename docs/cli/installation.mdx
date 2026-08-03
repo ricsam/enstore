@@ -1,0 +1,24 @@
+---
+title: Install the CLI
+description: Install the enstore command and connect it to an Enstore server.
+---
+
+Install `@enstore/cli` globally:
+
+```bash
+npm install -g @enstore/cli
+```
+
+Confirm the command is available:
+
+```bash
+enstore --help
+```
+
+The client requires an Enstore endpoint, username, and password. The simplest setup is the interactive login command:
+
+```bash
+enstore login https://storage.example.com admin
+```
+
+The password is prompted for and saved with the endpoint and username. Continue with [credentials](/cli/credentials) to choose a custom credentials file or use environment variables.

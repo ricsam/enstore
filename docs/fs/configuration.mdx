@@ -1,0 +1,51 @@
+---
+title: Client configuration
+description: Resolve @enstore/fs credentials and map client paths with pathPrefix.
+---
+
+## Options
+
+```ts
+interface EnstoreFsOptions {
+  endpoint?: string;
+  username?: string;
+  password?: string;
+  credentialsFilePath?: string;
+  pathPrefix?: string;
+}
+```
+
+## Credential resolution
+
+For each missing credential, the client checks:
+
+1. Constructor options.
+2. `ENSTORE_ENDPOINT`, `ENSTORE_USERNAME`, and `ENSTORE_PASSWORD`.
+3. A credentials file at `credentialsFilePath` or `~/.enstore/credentials.json`.
+
+The constructor throws if endpoint, username, or password is still missing.
+
+```ts
+const remote = new EnstoreFs({
+  credentialsFilePath: './credentials.json',
+});
+```
+
+The credentials file uses the same format as the [CLI credentials file](/cli/credentials).
+
+## Path prefix
+
+Use `pathPrefix` to scope a client to a remote directory:
+
+```ts
+const reports = new EnstoreFs({
+  endpoint: 'https://storage.example.com',
+  username: 'reporter',
+  password: process.env.ENSTORE_PASSWORD,
+  pathPrefix: '/teams/finance',
+});
+
+await reports.promises.writeFile('/monthly/march.txt', 'Complete');
+```
+
+The request targets `/teams/finance/monthly/march.txt` on the server.

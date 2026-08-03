@@ -1,0 +1,48 @@
+---
+title: Embed in Express
+description: Mount Enstore routes in an existing Express application.
+---
+
+Install the server package in your application:
+
+```bash
+npm install @enstore/server express
+```
+
+Create and mount the middleware:
+
+```ts
+import express from 'express';
+import {
+  createEnstoreMiddleware,
+  type EnstoreServerConfig,
+} from '@enstore/server';
+
+const app = express();
+
+const config: EnstoreServerConfig = {
+  uploadsDirectory: './uploads',
+  userFilePath: './users.json',
+};
+
+app.use('/enstore', createEnstoreMiddleware(config));
+
+app.listen(3000, () => {
+  console.log('Enstore listening at http://localhost:3000/enstore');
+});
+```
+
+## Configuration type
+
+```ts
+interface EnstoreServerConfig {
+  uploadsDirectory: string;
+  userFilePath: string;
+}
+```
+
+The returned value is an Express `Router`. File routes are available at `<mount-path>/files`, user routes at `<mount-path>/users`, and health status at `<mount-path>/healthz`.
+
+<Note>
+  The middleware installs JSON parsing for its own routes. Multipart file uploads are handled by the file router.
+</Note>

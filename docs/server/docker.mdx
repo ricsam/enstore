@@ -1,0 +1,50 @@
+---
+title: Run with Docker
+description: Start Enstore from the published container image with persistent storage.
+---
+
+Pull the image from GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/ricsam/enstore-server:latest
+```
+
+## Create an admin from environment variables
+
+```bash
+docker run -d --name enstore \
+  -p 3000:3000 \
+  -e ADMIN_USERNAME=admin \
+  -e ADMIN_PASSWORD='change-me' \
+  -v "$PWD/enstore-data:/app" \
+  ghcr.io/ricsam/enstore-server:latest
+```
+
+The entrypoint creates an `admin` role with `read`, `write`, and `manageUsers`, adds the requested user, and starts the server. Uploaded files are stored under `/app/uploads` and users under `/app/users.json`.
+
+<Warning>
+  Do not commit administrator passwords. Supply them through your container platform's secret management facility.
+</Warning>
+
+## Use an existing user file
+
+If `/app/users.json` already contains your users, omit the two admin environment variables:
+
+```bash
+docker run -d --name enstore \
+  -p 3000:3000 \
+  -v "$PWD/enstore-data:/app" \
+  ghcr.io/ricsam/enstore-server:latest
+```
+
+## Change the container port
+
+The image reads `PORT` and defaults to `3000`:
+
+```bash
+docker run -d --name enstore \
+  -e PORT=8080 \
+  -p 8080:8080 \
+  -v "$PWD/enstore-data:/app" \
+  ghcr.io/ricsam/enstore-server:latest
+```

@@ -1,0 +1,56 @@
+---
+title: Quickstart
+description: Start an Enstore server and perform your first file operations.
+---
+
+This guide starts a local Enstore server, creates an administrator, and uses the client CLI to upload and read a file.
+
+<Steps>
+  <Step title="Install the server and client">
+    ```bash
+    npm install -g @enstore/server @enstore/cli
+    ```
+  </Step>
+
+  <Step title="Create an admin role and user">
+    Create a project directory, then initialize a local user store.
+
+    ```bash
+    mkdir my-enstore && cd my-enstore
+    enstore-server user add-role admin read write manageUsers --users ./users.json
+    enstore-server user add admin admin --users ./users.json
+    ```
+
+    The second command prompts for the administrator password.
+  </Step>
+
+  <Step title="Start Enstore">
+    ```bash
+    enstore-server start \
+      --port 3000 \
+      --users ./users.json \
+      --uploads-dir ./uploads
+    ```
+
+    Leave this process running. The server listens at `http://localhost:3000`.
+  </Step>
+
+  <Step title="Save client credentials">
+    In a second terminal, log in with the password you created.
+
+    ```bash
+    enstore login http://localhost:3000 admin
+    ```
+  </Step>
+
+  <Step title="Upload and read a file">
+    ```bash
+    printf 'Hello from Enstore\n' > hello.txt
+    enstore write ./hello.txt /
+    enstore ls /
+    enstore read /hello.txt
+    ```
+  </Step>
+</Steps>
+
+You now have a local server with authenticated file access. Continue with [server configuration](/server/configuration), [CLI commands](/cli/file-commands), or the [Node.js client](/fs/overview).
